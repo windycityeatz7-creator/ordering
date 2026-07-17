@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Windy City Eatz &mdash; Inventory</title>
+  <meta name="theme-color" content="#0f0f0f" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ================= LOGIN ================= -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="emoji">🌪️</span>
+        <h1>Windy City Eatz</h1>
+        <p>Inventory Ordering &amp; Management</p>
+      </div>
+
+      <form id="login-form">
+        <div class="field">
+          <label for="login-location">Location</label>
+          <select id="login-location" required></select>
+        </div>
+        <div class="field">
+          <label for="login-role">Role</label>
+          <select id="login-role" required>
+            <option value="employee">Employee</option>
+            <option value="orderteam">Order Team</option>
+            <option value="receiving">Receiving</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="login-pin">PIN</label>
+          <input id="login-pin" type="password" inputmode="numeric" autocomplete="off" placeholder="Enter PIN" required />
+        </div>
+        <button type="submit" class="btn btn-accent btn-block">Sign In</button>
+        <div class="error-text" id="login-error"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= APP ================= -->
+  <div id="app-screen" class="hidden">
+    <div id="top-nav">
+      <div class="nav-brand">
+        <span>🌪️</span>
+        <span class="full">Windy City Eatz</span>
+      </div>
+      <div class="nav-badges">
+        <span class="badge badge-location" id="nav-location-badge"></span>
+        <span class="badge badge-role" id="nav-role-badge"></span>
+        <span class="badge" id="nav-sync-badge">
+          <span class="sync-dot" id="sync-dot"></span>
+          <span id="sync-label">Connecting</span>
+        </span>
+      </div>
+      <div class="nav-actions">
+        <button class="btn btn-sm btn-ghost" id="signout-btn">Sign Out</button>
+      </div>
+    </div>
+
+    <div id="tabs-bar"></div>
+
+    <div id="tab-content"></div>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="toast-root"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/email.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
