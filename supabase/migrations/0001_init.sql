@@ -110,7 +110,7 @@ values (
   1,
   '["Windy City Eatz Soul", "Windy City Eatz Raceway", "Windy City Eatz Trailer"]'::jsonb,
   '["Food & Beverages", "Cleaning Supplies", "Office Supplies", "Equipment & Maintenance", "Personal Protective Equipment (PPE)"]'::jsonb,
-  '["US Foods", "Gordon'\''s Food Service", "Sam'\''s Club"]'::jsonb,
+  '["US Foods", "Gordon''s Food Service", "Sam''s Club"]'::jsonb,
   '[
     {"id": "vienna-hot-dogs", "name": "Vienna Hot Dogs", "unit": "case (x2)", "category": "Food & Beverages"},
     {"id": "italian-beef", "name": "Italian Beef", "unit": "case (x2)", "category": "Food & Beverages"},
