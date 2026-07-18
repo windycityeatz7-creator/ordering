@@ -98,9 +98,29 @@ create policy "orders_delete_anon" on public.orders
 
 -- ============================================================
 -- Realtime
+--
+-- ALTER PUBLICATION ... ADD TABLE has no IF NOT EXISTS form, so it
+-- errors on a second run once a table is already a publication member.
+-- Wrapped in existence checks so this whole file stays safe to re-run
+-- (needed for automated migrations via CI, and for anyone who re-runs
+-- it manually after a partial failure).
 -- ============================================================
-alter publication supabase_realtime add table public.orders;
-alter publication supabase_realtime add table public.config;
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'orders'
+  ) then
+    alter publication supabase_realtime add table public.orders;
+  end if;
+
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'config'
+  ) then
+    alter publication supabase_realtime add table public.config;
+  end if;
+end $$;
 
 -- ============================================================
 -- Seed data

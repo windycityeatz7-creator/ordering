@@ -30,18 +30,21 @@ public/               static site source (deployed as-is or via the build script
     email.js             EmailJS notification helper
     app.js                app state, rendering, and all tab logic
 scripts/build.js       copies public/ -> dist/, injects env vars into config.js
-supabase/migrations/0001_init.sql   full schema + seed data
+supabase/migrations/20260718000000_init.sql   full schema + seed data
+.github/workflows/supabase-migrations.yml   auto-applies new migrations on push
 netlify.toml           build command, publish dir, SPA redirect
 ```
 
 ## 1. Set up Supabase
 
 1. Create a new project at [supabase.com](https://supabase.com).
-2. Open the SQL editor and run `supabase/migrations/0001_init.sql`. This
-   creates the `config` and `orders` tables, enables Row Level Security,
-   adds permissive anon policies (see note below), enables Realtime on
-   both tables, and seeds the default locations, categories, suppliers,
-   starting inventory items, and PINs.
+2. Open the SQL editor and run `supabase/migrations/20260718000000_init.sql`.
+   This creates the `config` and `orders` tables, enables Row Level
+   Security, adds permissive anon policies (see note below), enables
+   Realtime on both tables, and seeds the default locations, categories,
+   suppliers, starting inventory items, and PINs. The whole file is safe
+   to re-run if it fails partway through — every statement is written to
+   be idempotent.
 3. From **Project Settings -> API**, copy the **Project URL** and the
    **anon public key** — you'll need both for step 3.
 
@@ -58,6 +61,28 @@ settings) is enforced in the client UI only. If you need real
 per-role database security, put a Supabase Edge Function (or small server)
 in front of writes that validates the caller's PIN/role server-side, and
 tighten the RLS policies to require it.
+
+### Automatic migrations (optional)
+
+`.github/workflows/supabase-migrations.yml` uses the Supabase CLI to
+automatically apply any file added under `supabase/migrations/` whenever
+it's pushed to the deploy branch — so future schema changes just need a
+new `supabase/migrations/<timestamp>_description.sql` file committed and
+pushed, no manual SQL Editor step required.
+
+To enable it, add three repository secrets (GitHub repo -> **Settings ->
+Secrets and variables -> Actions -> New repository secret**):
+
+| Secret | Where to find it |
+|---|---|
+| `SUPABASE_ACCESS_TOKEN` | Supabase dashboard -> your account menu (top right) -> **Account -> Access Tokens** -> Generate new token |
+| `SUPABASE_PROJECT_ID` | Project Settings -> General -> **Reference ID** (also the subdomain in your Project URL, e.g. `xxxxx` in `https://xxxxx.supabase.co`) |
+| `SUPABASE_DB_PASSWORD` | The database password you set when creating the project. If forgotten, reset it under Project Settings -> Database -> **Reset database password** |
+
+Without these secrets the workflow will simply fail (harmlessly) on the
+`supabase link` step — the site itself is unaffected either way, since
+Netlify deploys are a separate pipeline. This is entirely optional; you
+can always keep applying migrations by hand in the SQL Editor instead.
 
 ## 2. Set up EmailJS
 
