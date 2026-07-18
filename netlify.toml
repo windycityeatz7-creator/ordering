@@ -4,6 +4,14 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # SUPABASE_URL and SUPABASE_ANON_KEY are intentionally embedded in the
+  # client-side bundle (dist/js/config.js) -- that's required for a
+  # Supabase browser client to work at all. Neither is a secret: the URL
+  # is just an endpoint, and the anon key is designed to be public,
+  # protected by Postgres Row Level Security rather than by secrecy. This
+  # tells Netlify's build-output secrets scanner not to flag them as
+  # leaked credentials and fail the build.
+  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL,SUPABASE_ANON_KEY"
 
 [[redirects]]
   from = "/*"
